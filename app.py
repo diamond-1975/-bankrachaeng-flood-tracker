@@ -4,16 +4,15 @@ import numpy as np
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import json
 
-# --- การเชื่อมต่อ Firebase (รองรับ Streamlit Cloud Secrets) ---
+# --- การเชื่อมต่อ Firebase ที่ปลอดภัย ---
 if not firebase_admin._apps:
     if "firebase" in st.secrets:
-        # แปลงค่าตระกูล Secrets บน Cloud ให้เป็นดิกชันนารีเพื่อเชื่อมต่อ
+        # ดึงค่าจาก Secrets บน Streamlit Cloud มาแปลงเป็นดิกชันนารี
         secret_dict = dict(st.secrets["firebase"])
         cred = credentials.Certificate(secret_dict)
     else:
-        # กรณีรันบนเครื่องคอมพิวเตอร์ตัวเอง (Local)
+        # กรณีรันบนคอมพิวเตอร์ตัวเอง (Local)
         cred = credentials.Certificate(r"serviceAccount.json")
     
     firebase_admin.initialize_app(cred)
