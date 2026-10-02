@@ -5,20 +5,16 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-# --- การเชื่อมต่อ Firebase ที่ปลอดภัย ---
 if not firebase_admin._apps:
     if "firebase" in st.secrets:
-        # ดึงค่าจาก Secrets บน Streamlit Cloud มาแปลงเป็นดิกชันนารี
         secret_dict = dict(st.secrets["firebase"])
         cred = credentials.Certificate(secret_dict)
     else:
-        # กรณีรันบนคอมพิวเตอร์ตัวเอง (Local)
         cred = credentials.Certificate(r"serviceAccount.json")
-    
+
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-
 # --- 3. ฟังก์ชันดึงข้อมูลจาก Firestore (อัปเดต: ดึง Document ID มาด้วย) ---
 @st.cache_data(ttl=10)
 def load_data():
