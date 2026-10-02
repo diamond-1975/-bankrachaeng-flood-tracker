@@ -8,13 +8,12 @@ import json
 
 # --- การเชื่อมต่อ Firebase (รองรับ Streamlit Cloud Secrets) ---
 if not firebase_admin._apps:
-    # ตรวจสอบว่ารันอยู่บน Cloud หรือเครื่องคอมพิวเตอร์
     if "firebase" in st.secrets:
-        # ดึงค่าจาก Secrets บน Streamlit Cloud
+        # แปลงค่าตระกูล Secrets บน Cloud ให้เป็นดิกชันนารีเพื่อเชื่อมต่อ
         secret_dict = dict(st.secrets["firebase"])
         cred = credentials.Certificate(secret_dict)
     else:
-        # ถ้าทดสอบรันบนเครื่องตัวเอง (Local) ให้ใช้ไฟล์ JSON เดิม
+        # กรณีรันบนเครื่องคอมพิวเตอร์ตัวเอง (Local)
         cred = credentials.Certificate(r"serviceAccount.json")
     
     firebase_admin.initialize_app(cred)
